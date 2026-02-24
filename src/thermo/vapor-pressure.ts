@@ -1,15 +1,7 @@
 ﻿// Vapor pressure utilities mirroring private/vapor-pressure/vapor-pressure.py
-import type { Pressure, Temperature } from "mozithermodb-settings";
+import type { Pressure, Temperature, CustomProperty } from "mozithermodb-settings";
 
 export type PressureUnit = "Pa" | "kPa" | "MPa" | "bar" | "atm" | "psi" | "mmHg";
-export type VaporPressureResult = {
-  result: {
-    value: number;
-    unit: string;
-    symbol: "VaPr";
-  };
-  message?: string;
-};
 
 type TemperatureRange = [Temperature, Temperature];
 type AntoineBase = "log10" | "ln";
@@ -29,6 +21,24 @@ const isPressure = (value: unknown): value is Pressure =>
   isFiniteNumber((value as Pressure).value) &&
   typeof (value as Pressure).unit === "string";
 
+/**
+ * Calculate vapor pressure using the Antoine equation with specified constants.
+ *
+ * Equation:
+ * - log10(P) = A - B / (T + C)  (base: "log10")
+ * - ln(P)    = A - B / (T + C)  (base: "ln")
+ *
+ * Notes:
+ * - This mirrors the Python implementation (no unit conversion; output unit is a label).
+ * - Returns null on invalid inputs and logs an error to the console.
+ *
+ * Parameters:
+ * - A, B, C: Antoine equation constants.
+ * - temperature: Temperature at which to calculate vapor pressure.
+ * - temperatureRange: Optional [Tmin, Tmax] range for validity check.
+ * - outputUnit: Optional output unit label (no conversion is performed).
+ * - base: Logarithmic base ("log10" or "ln"), default is "log10".
+ */
 export const antoine = (
   A: number,
   B: number,
@@ -37,8 +47,7 @@ export const antoine = (
   temperatureRange?: TemperatureRange,
   outputUnit?: PressureUnit,
   base: AntoineBase = "log10",
-  message?: string
-): VaporPressureResult | null => {
+): CustomProperty | null => {
   try {
     if (!isTemperature(temperature)) {
       console.error("Invalid temperature input. Must be of type Temperature.");
@@ -67,7 +76,7 @@ export const antoine = (
       if (!(Tmin.value <= temperatureValue && temperatureValue <= Tmax.value)) {
         console.error(
           `Temperature ${temperatureValue} ${temperatureUnit} is out of the valid range: ` +
-            `${Tmin.value} ${Tmin.unit} to ${Tmax.value} ${Tmax.unit}.`
+          `${Tmin.value} ${Tmin.unit} to ${Tmax.value} ${Tmax.unit}.`
         );
         return null;
       }
@@ -87,14 +96,13 @@ export const antoine = (
 
     const pressureUnit = outputUnit ?? "N/A";
 
+    // res
     return {
-      result: {
-        value: pressureValue,
-        unit: pressureUnit,
-        symbol: "VaPr"
-      },
-      message
+      value: pressureValue,
+      unit: pressureUnit,
+      symbol: "VaPr"
     };
+
   } catch (error) {
     const messageText = error instanceof Error ? error.message : String(error);
     console.error(`Error in Antoine vapor pressure calculation: ${messageText}`);
@@ -102,6 +110,26 @@ export const antoine = (
   }
 };
 
+/**
+ * Calculate vapor pressure using the Wagner equation with specified constants.
+ *
+ * Equation:
+ * - ln(P/Pc) = (A*tau + B*tau^1.5 + C*tau^2.5 + D*tau^5) / (1 - tau)
+ * - tau = 1 - (T / Tc)
+ *
+ * Notes:
+ * - Temperature must be below critical temperature (T < Tc).
+ * - This mirrors the Python implementation (no unit conversion; output unit is a label).
+ * - Returns null on invalid inputs and logs an error to the console.
+ *
+ * Parameters:
+ * - A, B, C, D: Wagner equation constants.
+ * - temperature: Temperature at which to calculate vapor pressure.
+ * - criticalTemperature: Critical temperature of the substance.
+ * - criticalPressure: Critical pressure of the substance.
+ * - temperatureRange: Optional [Tmin, Tmax] range for validity check.
+ * - outputUnit: Optional output unit label (no conversion is performed).
+ */
 export const wagner = (
   A: number,
   B: number,
@@ -112,8 +140,7 @@ export const wagner = (
   criticalPressure: Pressure,
   temperatureRange?: TemperatureRange,
   outputUnit?: PressureUnit,
-  message?: string
-): VaporPressureResult | null => {
+): CustomProperty | null => {
   try {
     if (![A, B, C, D].every(isFiniteNumber)) {
       console.error("Wagner constants A, B, C, and D must be numeric values.");
@@ -147,7 +174,7 @@ export const wagner = (
       if (!(Tmin.value <= T && T <= Tmax.value)) {
         console.error(
           `Temperature ${T} ${temperature.unit} is out of the valid range: ` +
-            `${Tmin.value} ${Tmin.unit} to ${Tmax.value} ${Tmax.unit}.`
+          `${Tmin.value} ${Tmin.unit} to ${Tmax.value} ${Tmax.unit}.`
         );
         return null;
       }
@@ -165,13 +192,10 @@ export const wagner = (
     const pressureUnit = outputUnit ?? "N/A";
 
     return {
-      result: {
-        value: pressureValue,
-        unit: pressureUnit,
-        symbol: "VaPr"
-      },
-      message
-    };
+      value: pressureValue,
+      unit: pressureUnit,
+      symbol: "VaPr"
+    }
   } catch (error) {
     const messageText = error instanceof Error ? error.message : String(error);
     console.error(`Error in Wagner vapor pressure calculation: ${messageText}`);

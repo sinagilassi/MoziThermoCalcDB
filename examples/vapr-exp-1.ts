@@ -16,7 +16,6 @@ const antoineLog10 = antoine(
   temperatureRange,
   "mmHg",
   "log10",
-  "Antoine (log10) example"
 );
 
 const antoineLn = antoine(
@@ -27,7 +26,6 @@ const antoineLn = antoine(
   temperatureRange,
   "Pa",
   "ln",
-  "Antoine (ln) example"
 );
 
 const criticalTemperature: Temperature = { value: 647.1, unit: "K" };
@@ -43,7 +41,6 @@ const wagnerResult = wagner(
   criticalPressure,
   temperatureRange,
   "Pa",
-  "Wagner example"
 );
 
 const badTemperature = { value: Number.NaN, unit: "K" } as Temperature;
