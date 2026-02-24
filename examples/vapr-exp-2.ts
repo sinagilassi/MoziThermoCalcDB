@@ -95,20 +95,25 @@ const bracket: [Temperature, Temperature] = [
 
 // SECTION: Different root-finding methods
 const tsatNewton = calc_T_sat(component, modelSource, targetPressure, temperatureGuess, bracket, "newton");
+console.log("Tsat (newton):", tsatNewton);
+
 const tsatBrent = calc_T_sat(component, modelSource, targetPressure, temperatureGuess, bracket, "brentq");
+console.log("Tsat (brentq):", tsatBrent);
+
 const tsatBisect = calc_T_sat(component, modelSource, targetPressure, temperatureGuess, bracket, "bisect");
+console.log("Tsat (bisect):", tsatBisect);
+
 const tsatLeastSquares = calc_T_sat(component, modelSource, targetPressure, temperatureGuess, bracket, "least_squares");
+console.log("Tsat (least_squares):", tsatLeastSquares);
+
 const tsatAuto = calc_T_sat(component, modelSource, targetPressure, temperatureGuess, bracket, "auto");
+console.log("Tsat (auto):", tsatAuto);
 
 const vaprAt350 = calc_VaPr(component, modelSource, { value: 350, unit: "K" });
-const envapAt350 = calc_EnVap(component, modelSource, { value: 350, unit: "K" });
-const sensitivityAt350 = calc_VaPr_sensitivity(component, modelSource, { value: 350, unit: "K" });
-
-console.log("Tsat (newton):", tsatNewton);
-console.log("Tsat (brentq):", tsatBrent);
-console.log("Tsat (bisect):", tsatBisect);
-console.log("Tsat (least_squares):", tsatLeastSquares);
-console.log("Tsat (auto):", tsatAuto);
 console.log("VaPr @ 350 K:", vaprAt350);
+
+const envapAt350 = calc_EnVap(component, modelSource, { value: 350, unit: "K" });
 console.log("EnVap @ 350 K:", envapAt350);
+
+const sensitivityAt350 = calc_VaPr_sensitivity(component, modelSource, { value: 350, unit: "K" });
 console.log("dPsat/dT @ 350 K:", sensitivityAt350);

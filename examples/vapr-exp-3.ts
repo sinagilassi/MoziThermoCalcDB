@@ -90,11 +90,14 @@ const temperatures: Temperature[] = [
     { value: 380, unit: "K" },
 ];
 
-const vaprRange = calc_VaPr_range(component, modelSource, temperatures);
-const envapRange = calc_EnVap_range(component, modelSource, temperatures);
-const sensitivityRange = calc_VaPr_sensitivity_range(component, modelSource, temperatures);
-
 console.log("Temperatures:", temperatures);
+
+const vaprRange = calc_VaPr_range(component, modelSource, temperatures);
 console.log("VaPr range:", vaprRange);
+
+const envapRange = calc_EnVap_range(component, modelSource, temperatures);
 console.log("EnVap range:", envapRange);
+
+const sensitivityRange = calc_VaPr_sensitivity_range(component, modelSource, temperatures);
 console.log("dPsat/dT range:", sensitivityRange);
+
