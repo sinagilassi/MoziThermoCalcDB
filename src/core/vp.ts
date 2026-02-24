@@ -9,12 +9,21 @@ import {
     set_component_id
 } from "mozithermodb-settings"
 import { Source, ComponentEquationSource, calcEq } from "mozithermodb"
-import { to } from "mozicuc"
+import * as mozicuc from "mozicuc"
 
 // ! LOCALS
 import { VaPr_SYMBOL } from "@/configs/thermo-props";
 import { R_J_molK, T_ref_K } from "@/configs/constants";
 import { bisectSolve, brentSolve, leastSquaresSolve, newtonSolve } from "@/solvers";
+
+const convertFromTo = (
+    (mozicuc as unknown as { convertFromTo?: unknown }).convertFromTo ??
+    (mozicuc as unknown as { default?: { convertFromTo?: unknown } }).default?.convertFromTo
+) as typeof import("mozicuc")["convertFromTo"]
+
+if (typeof convertFromTo !== "function") {
+    throw new Error("mozicuc.convertFromTo is unavailable. This is likely a package ESM/CJS export mismatch.")
+}
 
 /**
  * Component vapor pressure class used to calculate the following properties:
@@ -78,7 +87,7 @@ export class ComponentVaporPressure {
 
     private convertValue(value: number, fromUnit: string, toUnit: string): number {
         if (fromUnit === toUnit) return value
-        return to(value, `${fromUnit} => ${toUnit}`)
+        return convertFromTo(value, fromUnit, toUnit)
     }
 
     private getExpectedTemperatureUnit(): string {
