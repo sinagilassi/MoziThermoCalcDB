@@ -19,8 +19,13 @@ const calc_VaPrCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate vapor pressure
     return vapr.calc_VaPr(temperature);
   } catch (error) {
     logError(`Error calculating vapor pressure for component '${component.name}'`, error);
@@ -35,8 +40,13 @@ const calc_VaPr_rangeCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty[] | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate vapor pressure range
     return vapr.calc_VaPr_range(temperatures);
   } catch (error) {
     logError(`Error calculating vapor pressure range for component '${component.name}'`, error);
@@ -52,8 +62,13 @@ const calc_EnVapCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate enthalpy of vaporization
     return vapr.calc_EnVap_Clapeyron(temperature);
   } catch (error) {
     logError(`Error calculating enthalpy of vaporization for component '${component.name}'`, error);
@@ -68,8 +83,13 @@ const calc_EnVap_rangeCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty[] | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate enthalpy of vaporization range
     return vapr.calc_EnVap_Clapeyron_range(temperatures);
   } catch (error) {
     logError(`Error calculating enthalpy of vaporization range for component '${component.name}'`, error);
@@ -91,8 +111,13 @@ const calc_T_satCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate saturated temperature
     return vapr.calc_TeVaPr(
       pressure,
       temperature_guess,
@@ -116,8 +141,13 @@ const calc_VaPr_sensitivityCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate vapor pressure sensitivity
     return vapr.calc_dPsat__dT(temperature);
   } catch (error) {
     logError(`Error calculating vapor pressure sensitivity for component '${component.name}'`, error);
@@ -132,8 +162,13 @@ const calc_VaPr_sensitivity_rangeCore = (
   component_key: ComponentKey = "Name-Formula",
 ): CustomProperty[] | null => {
   try {
+    // NOTE: Initialize source
     const source = new Source(model_source, component_key);
+
+    // NOTE: Initialize vapor pressure calculator
     const vapr = new ComponentVaporPressure(component, source, component_key);
+
+    // NOTE: Calculate vapor pressure sensitivity range
     return vapr.calc_dPsat__dT_range(temperatures);
   } catch (error) {
     logError(`Error calculating vapor pressure sensitivity range for component '${component.name}'`, error);
@@ -141,6 +176,8 @@ const calc_VaPr_sensitivity_rangeCore = (
   }
 };
 
+
+// SECTION: Exported Functions with Timing
 export const calc_VaPr = timeItFn(calc_VaPrCore, { label: "calc_VaPr" });
 export const calc_VaPr_range = timeItFn(calc_VaPr_rangeCore, { label: "calc_VaPr_range" });
 export const calc_EnVap = timeItFn(calc_EnVapCore, { label: "calc_EnVap" });
