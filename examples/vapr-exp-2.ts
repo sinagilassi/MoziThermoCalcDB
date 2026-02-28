@@ -36,7 +36,7 @@ const eq: Eq<P, A> = (p, a) => {
   return { value, unit: "Pa", symbol: "VaPr" };
 };
 
-const component = ComponentSchema.parse({
+const component: Component = ComponentSchema.parse({
   name: "Water",
   formula: "H2O",
   state: "l",
@@ -82,8 +82,8 @@ const equationSource = {
   },
 };
 
+// NOTE: create model source
 const modelSource = { dataSource, equationSource };
-const source = new Source(modelSource, componentKey);
 
 // SECTION: Inputs for Tsat at given pressure
 const targetPressure: Pressure = { value: 101325, unit: "Pa" };
