@@ -1,49 +1,17 @@
 # MoziThermoCalcDB 🧪
 
+[![npm](https://img.shields.io/npm/v/mozithermocalcdb)](https://www.npmjs.com/package/mozithermocalcdb)
+[![npm downloads](https://img.shields.io/npm/dm/mozithermocalcdb?color=brightgreen)](https://www.npmjs.com/package/mozithermocalcdb)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 A TypeScript library for thermodynamic property calculations — vapor pressure, ideal-gas enthalpy, entropy, Gibbs free energy, heat capacity, and liquid density.
 
-[![npm](https://img.shields.io/npm/v/mozithermocalcdb)](https://www.npmjs.com/package/mozithermocalcdb)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
-
----
 
 ## 📦 Install
 
 ```bash
 npm install mozithermocalcdb
 ```
-
----
-
-## 🗂️ Package Layout
-
-```
-src/
-├── index.ts              # Public entry point
-├── thermo/
-│   ├── vapor-pressure.ts # Antoine & Wagner equations
-│   ├── enthalpy.ts       # Ideal-gas enthalpy (NASA7, NASA9, Shomate)
-│   ├── entropy.ts        # Ideal-gas entropy  (NASA7, NASA9, Shomate)
-│   ├── gibbs.ts          # Gibbs free energy  (G = H − T·S)
-│   ├── heat-capacity.ts  # Ideal-gas Cp       (NASA7, NASA9, Shomate)
-│   └── density.ts        # Liquid density (Rackett)
-├── core/
-│   └── vp.ts             # ComponentVaporPressure (root-finding)
-├── solvers/
-│   ├── newton.ts         # Newton-Raphson
-│   ├── bisect.ts         # Bisection
-│   ├── brent.ts          # Brent's method
-│   └── least-squares.ts  # Least-squares minimisation
-├── docs/
-│   └── sat.ts            # High-level saturation helpers
-└── utils/
-    └── time-it.ts        # Performance timing wrapper
-```
-
-> **Note:** Only `src/thermo/*` is exported from `src/index.ts`.
-> `core/`, `solvers/`, `docs/`, and `utils/` are internal modules.
-
----
 
 ## ⚡ Quick Start
 
@@ -404,53 +372,15 @@ All solvers return `{ root: number, converged: boolean, iterations: number }`.
 
 ---
 
-## 🏗️ Build & Development
-
-```bash
-# Build (ESM, CJS, browser bundles + .d.ts)
-npm run build
-
-# Run tests (Vitest)
-npm test
-
-# Type-check only
-npm run typecheck
-
-# Lint
-npm run lint
-```
-
-### Output bundles
-
-| File | Format |
-|---|---|
-| `dist/index.mjs` | ES Module |
-| `dist/index.cjs` | CommonJS |
-| `dist/index.browser.mjs` | Browser ESM |
-| `dist/index.d.ts` | TypeScript declarations |
-
----
-
-## 📐 Physical Constants
-
-| Symbol | Value | Unit |
-|---|---|---|
-| `R` | 8.314 462 618 | J / mol·K |
-| `T_ref` | 298.15 | K |
-| `P_ref` | 101 325 | Pa |
-
----
-
-## 🔗 Dependencies
-
-| Package | Purpose |
-|---|---|
-| [`mozicuc`](https://www.npmjs.com/package/mozicuc) | Unit conversion |
-| [`mozithermodb`](https://www.npmjs.com/package/mozithermodb) | Thermodynamic database |
-| [`mozithermodb-settings`](https://www.npmjs.com/package/mozithermodb-settings) | Shared type definitions |
-
----
 
 ## 📄 License
 
-[Apache 2.0](./LICENSE) © Sina Gilassi
+Licensed under the Apache-2.0 License. See `LICENSE`.
+
+## ❓ FAQ
+
+For questions, contact Sina Gilassi on [LinkedIn](https://www.linkedin.com/in/sina-gilassi/).
+
+## 👨‍💻 Author
+
+- [@sinagilassi](https://github.com/sinagilassi)
