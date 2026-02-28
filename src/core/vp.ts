@@ -101,7 +101,7 @@ export class ComponentVaporPressure {
         return { value, unit }
     }
 
-    // SECTION: calculations
+    // SECTION: Vapour pressure calculations
     calc_VaPr(temperature: Temperature): CustomProperty {
         if (!this.VaPrComponent_eqSrc) {
             throw new Error("Vapor pressure equation source not initialized.")
@@ -135,10 +135,12 @@ export class ComponentVaporPressure {
         }
     }
 
+    // NOTE: range calculations
     calc_VaPr_range(temperatureRange: Temperature[]): CustomProperty[] {
         return temperatureRange.map((t) => this.calc_VaPr(t))
     }
 
+    // SECTION: derivative and related properties
     calc_dPsat__dT(temperature: Temperature, h?: number): CustomProperty {
         const expectedUnit = this.getExpectedTemperatureUnit()
         let T_value = temperature.value
@@ -169,10 +171,12 @@ export class ComponentVaporPressure {
         }
     }
 
+    // NOTE: range calculations
     calc_dPsat__dT_range(temperatureRange: Temperature[], h?: number): CustomProperty[] {
         return temperatureRange.map((t) => this.calc_dPsat__dT(t, h))
     }
 
+    // SECTION: Enthalpy of vaporization using Clausius-Clapeyron relation
     calc_EnVap_Clapeyron(temperature: Temperature, h?: number): CustomProperty {
         const expectedUnit = this.getExpectedTemperatureUnit()
         let T_value = temperature.value
@@ -199,10 +203,12 @@ export class ComponentVaporPressure {
         }
     }
 
+    // NOTE: range calculations
     calc_EnVap_Clapeyron_range(temperatureRange: Temperature[], h?: number): CustomProperty[] {
         return temperatureRange.map((t) => this.calc_EnVap_Clapeyron(t, h))
     }
 
+    // SECTION: Temperature at given vapor pressure using root finding
     calc_TeVaPr(
         pressure: Pressure,
         temperatureGuess?: Temperature,
