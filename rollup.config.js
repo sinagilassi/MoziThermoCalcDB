@@ -5,6 +5,8 @@ import dts from "rollup-plugin-dts";
 import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 import pkg from "./package.json" with { type: "json" };
 
+const isProduction = process.env.NODE_ENV !== "development";
+
 const externalDeps = new Set([
     ...Object.keys(pkg.dependencies ?? {}),
     ...Object.keys(pkg.peerDependencies ?? {}),
@@ -39,6 +41,10 @@ export default [
     {
         input: "src/index.ts",
         external: isExternal,
+        treeshake: {
+            moduleSideEffects: false,
+            propertyReadSideEffects: false,
+        },
         plugins: jsPlugins,
         output: [
             {
@@ -56,6 +62,7 @@ export default [
                 file: "dist/index.browser.mjs",
                 format: "es",
                 sourcemap: true,
+                compact: isProduction,
             },
         ],
     },
