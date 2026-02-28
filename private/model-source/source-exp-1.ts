@@ -1,6 +1,6 @@
 // Example: Using Source to extract data/equations and execute
 import type { Component } from "mozithermodb-settings";
-import { createEq, buildComponentEquation, buildComponentData } from "mozithermodb";
+import { createEq, buildComponentEquation, buildComponentData, buildComponentsEquation } from "mozithermodb";
 import type { ConfigParamMap, ConfigArgMap, ConfigRetMap, RawThermoRecord, Eq } from "mozithermodb";
 import { Source, calcEq } from "mozithermodb";
 

@@ -1,7 +1,7 @@
 import type { Component, Temperature } from "mozithermodb-settings";
-import { set_component_id, ComponentSchema } from "mozithermodb-settings";
+import { ComponentSchema } from "mozithermodb-settings";
 import type { ConfigArgMap, ConfigParamMap, ConfigRetMap, Eq, RawThermoRecord } from "mozithermodb";
-import { MoziEquation } from "mozithermodb";
+import { buildComponentData, buildComponentsEquation, createEq } from "mozithermodb";
 
 // ! LOCALS
 import {
@@ -41,9 +41,6 @@ const component = ComponentSchema.parse({
     state: "l",
 });
 
-const componentKey = "Name-Formula";
-const componentId = set_component_id(component, componentKey);
-
 const data: RawThermoRecord[] = [
     { name: "Name", symbol: "Name", value: component.name, unit: "" },
     { name: "Formula", symbol: "Formula", value: component.formula, unit: "" },
@@ -55,8 +52,7 @@ const data: RawThermoRecord[] = [
     { name: "Tmax", symbol: "Tmax", value: 473.15, unit: "K" },
 ];
 
-const vpEq = new MoziEquation(
-    "Antoine",
+const vpEq = createEq(
     params,
     args,
     ret,
@@ -64,22 +60,10 @@ const vpEq = new MoziEquation(
     "Antoine Vapor Pressure",
     "log10(P) = A - B / (T + C)"
 );
-vpEq.addData = data;
-vpEq.configure();
 
 const modelSource = {
-    dataSource: {
-        [componentId]: {
-            A: { value: 8.07131, unit: "-", symbol: "A" },
-            B: { value: 1730.63, unit: "K", symbol: "B" },
-            C: { value: 233.426, unit: "K", symbol: "C" },
-        },
-    },
-    equationSource: {
-        [componentId]: {
-            VaPr: vpEq,
-        },
-    },
+    dataSource: buildComponentData(component, data, ["Name-Formula"], true, "Name-Formula"),
+    equationSource: buildComponentsEquation([component], vpEq, [data], ["Name-Formula"], true, "Name-Formula"),
 };
 
 // SECTION: Range inputs for sat.ts range methods
@@ -100,4 +84,3 @@ console.log("EnVap range:", envapRange);
 
 const sensitivityRange = calc_VaPr_sensitivity_range(component, modelSource, temperatures);
 console.log("dPsat/dT range:", sensitivityRange);
-

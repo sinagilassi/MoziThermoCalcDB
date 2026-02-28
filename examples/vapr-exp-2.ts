@@ -1,7 +1,7 @@
 import type { Component, Pressure, Temperature } from "mozithermodb-settings";
-import { set_component_id, ComponentSchema } from "mozithermodb-settings";
+import { ComponentSchema } from "mozithermodb-settings";
 import type { ConfigArgMap, ConfigParamMap, ConfigRetMap, Eq, RawThermoRecord } from "mozithermodb";
-import { MoziEquation, Source } from "mozithermodb";
+import { buildComponentData, buildComponentEquation, createEq } from "mozithermodb";
 
 // ! LOCALS
 import {
@@ -13,7 +13,7 @@ import {
 
 // SECTION: Build a simple Antoine vapor pressure equation
 type P = "A" | "B" | "C";
-type A = "T";
+type A = "T" | "R";
 type R = "VaPr";
 
 const params: ConfigParamMap<P> = {
@@ -24,6 +24,7 @@ const params: ConfigParamMap<P> = {
 
 const args: ConfigArgMap<A> = {
   T: { name: "Temperature", symbol: "T", unit: "K" },
+  R: { name: "Universal Gas Constant", symbol: "R", unit: "J/kmol*K" },
 };
 
 const ret: ConfigRetMap<R> = {
@@ -32,7 +33,7 @@ const ret: ConfigRetMap<R> = {
 
 const eq: Eq<P, A> = (p, a) => {
   const log10P = p.A.value - p.B.value / (a.T.value + p.C.value);
-  const value = 10 ** log10P;
+  const value = 10 ** log10P + a.R.value; // Just to demonstrate multiple return values
   return { value, unit: "Pa", symbol: "VaPr" };
 };
 
@@ -41,9 +42,6 @@ const component: Component = ComponentSchema.parse({
   formula: "H2O",
   state: "l",
 });
-
-const componentKey = "Name-Formula";
-const componentId = set_component_id(component, componentKey);
 
 const data: RawThermoRecord[] = [
   { name: "Name", symbol: "Name", value: component.name, unit: "" },
@@ -54,10 +52,10 @@ const data: RawThermoRecord[] = [
   { name: "Antoine C", symbol: "C", value: 233.426, unit: "K" },
   { name: "Tmin", symbol: "Tmin", value: 273.15, unit: "K" },
   { name: "Tmax", symbol: "Tmax", value: 473.15, unit: "K" },
+  { name: "Universal Gas Constant", symbol: "R", value: 1000, unit: "J/kmol.K" },
 ];
 
-const vpEq = new MoziEquation(
-  "Antoine",
+const vpEq = createEq(
   params,
   args,
   ret,
@@ -65,22 +63,9 @@ const vpEq = new MoziEquation(
   "Antoine Vapor Pressure",
   "log10(P) = A - B / (T + C)"
 );
-vpEq.addData = data;
-vpEq.configure();
 
-const dataSource = {
-  [componentId]: {
-    A: { value: 8.07131, unit: "-", symbol: "A" },
-    B: { value: 1730.63, unit: "K", symbol: "B" },
-    C: { value: 233.426, unit: "K", symbol: "C" },
-  },
-};
-
-const equationSource = {
-  [componentId]: {
-    VaPr: vpEq,
-  },
-};
+const dataSource = buildComponentData(component, data, ["Name-Formula"], true, "Name-Formula");
+const equationSource = buildComponentEquation(component, vpEq, data, ["Name-Formula"], true, "Name-Formula");
 
 // NOTE: create model source
 const modelSource = { dataSource, equationSource };
