@@ -1,7 +1,7 @@
 {
   "name": "mozithermocalcdb",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "MoziThermoCalcDB designed to provide a robust set of thermodynamic calculations, utilities, and workflows for the Mozi ecosystem.",
   "homepage": "https://github.com/sinagilassi/MoziThermoCalcDB#readme",
   "bugs": {
     "url": "https://github.com/sinagilassi/MoziThermoCalcDB/issues"
