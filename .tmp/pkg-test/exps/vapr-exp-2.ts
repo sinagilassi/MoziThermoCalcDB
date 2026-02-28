@@ -9,7 +9,7 @@ import {
   calc_T_sat,
   calc_VaPr,
   calc_VaPr_sensitivity,
-} from "../src";
+} from "mozithermocalcdb";
 
 // SECTION: Build a simple Antoine vapor pressure equation
 type P = "A" | "B" | "C";

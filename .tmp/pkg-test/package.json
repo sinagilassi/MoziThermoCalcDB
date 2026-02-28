@@ -1,0 +1,14 @@
+{
+    "name": "pkg-test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "mozithermocalcdb": "file:../../mozithermocalcdb-0.1.0.tgz"
+    }
+}
