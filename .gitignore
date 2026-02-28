@@ -69,3 +69,4 @@ py-pkg/
 *.tgz
 
 # claude
+tmpclaude-*-cwd
