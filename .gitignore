@@ -63,7 +63,7 @@ coverage/
 py-pkg/
 
 # private
-# private/
+private/
 
 # compiled files
 *.tgz
