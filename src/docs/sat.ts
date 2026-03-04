@@ -12,6 +12,15 @@ const logError = (message: string, error: unknown) => {
 };
 
 // SECTION: Vapor Pressure
+/**
+ * Calculates the vapor pressure for a given component at a specified temperature using the provided model source.
+ *
+ * @param component - The chemical component for which vapor pressure is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperature - The temperature at which vapor pressure is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns The calculated vapor pressure as a CustomProperty, or null if an error occurs.
+ */
 const calc_VaPrCore = (
   component: Component,
   model_source: ModelSource,
@@ -33,6 +42,15 @@ const calc_VaPrCore = (
   }
 };
 
+/**
+ * Calculates the vapor pressure for a given component over a range of temperatures using the provided model source.
+ *
+ * @param component - The chemical component for which vapor pressure is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperatures - Array of temperatures at which vapor pressure is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns Array of vapor pressure results as CustomProperty, or null if an error occurs.
+ */
 const calc_VaPr_rangeCore = (
   component: Component,
   model_source: ModelSource,
@@ -55,6 +73,15 @@ const calc_VaPr_rangeCore = (
 };
 
 // SECTION: Enthalpy of Vaporization
+/**
+ * Calculates the enthalpy of vaporization for a given component at a specified temperature using the provided model source.
+ *
+ * @param component - The chemical component for which enthalpy of vaporization is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperature - The temperature at which enthalpy of vaporization is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns The calculated enthalpy of vaporization as a CustomProperty, or null if an error occurs.
+ */
 const calc_EnVapCore = (
   component: Component,
   model_source: ModelSource,
@@ -76,6 +103,15 @@ const calc_EnVapCore = (
   }
 };
 
+/**
+ * Calculates the enthalpy of vaporization for a given component over a range of temperatures using the provided model source.
+ *
+ * @param component - The chemical component for which enthalpy of vaporization is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperatures - Array of temperatures at which enthalpy of vaporization is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns Array of enthalpy of vaporization results as CustomProperty, or null if an error occurs.
+ */
 const calc_EnVap_rangeCore = (
   component: Component,
   model_source: ModelSource,
@@ -98,6 +134,21 @@ const calc_EnVap_rangeCore = (
 };
 
 // SECTION: Saturated Temperature
+/**
+ * Calculates the saturated temperature for a given component at a specified pressure using the provided model source.
+ *
+ * @param component - The chemical component for which saturated temperature is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param pressure - The pressure at which saturated temperature is evaluated.
+ * @param temperature_guess - Optional initial guess for the temperature.
+ * @param T_bracket - Optional bracket for temperature search as [min, max].
+ * @param method - Numerical method to use (default: "auto").
+ * @param tol - Tolerance for convergence (default: 1e-6).
+ * @param max_iter - Maximum number of iterations (default: 50).
+ * @param h - Optional step size for numerical differentiation.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns The calculated saturated temperature as a CustomProperty, or null if an error occurs.
+ */
 const calc_T_satCore = (
   component: Component,
   model_source: ModelSource,
@@ -134,6 +185,15 @@ const calc_T_satCore = (
 };
 
 // SECTION: Vapor Pressure Sensitivity
+/**
+ * Calculates the sensitivity of vapor pressure with respect to temperature for a given component at a specified temperature.
+ *
+ * @param component - The chemical component for which vapor pressure sensitivity is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperature - The temperature at which sensitivity is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns The calculated sensitivity as a CustomProperty, or null if an error occurs.
+ */
 const calc_VaPr_sensitivityCore = (
   component: Component,
   model_source: ModelSource,
@@ -155,6 +215,15 @@ const calc_VaPr_sensitivityCore = (
   }
 };
 
+/**
+ * Calculates the sensitivity of vapor pressure with respect to temperature for a given component over a range of temperatures.
+ *
+ * @param component - The chemical component for which vapor pressure sensitivity is calculated.
+ * @param model_source - The source of thermodynamic model parameters.
+ * @param temperatures - Array of temperatures at which sensitivity is evaluated.
+ * @param component_key - The key used to identify the component in the model source (default: "Name-Formula").
+ * @returns Array of sensitivity results as CustomProperty, or null if an error occurs.
+ */
 const calc_VaPr_sensitivity_rangeCore = (
   component: Component,
   model_source: ModelSource,
